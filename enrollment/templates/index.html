@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inscripción SS2 · Airflow</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="card">
+    <span class="eyebrow">USAC · Seminario de Sistemas 2</span>
+    <h1>Únete al laboratorio de Airflow</h1>
+    <p>Escribe tu usuario de GitHub para recibir una invitación a la organización del curso.</p>
+    <form method="post" action="/invite">
+      <label for="github_username">Usuario de GitHub</label>
+      <div class="field"><span>@</span><input id="github_username" name="github_username" required maxlength="39" autocomplete="username" placeholder="tu-usuario"></div>
+      <button type="submit">Solicitar invitación</button>
+    </form>
+    {% if message %}<p class="message" role="status">{{ message }}</p>{% endif %}
+    <small>Al continuar sólo se utiliza tu nombre público de usuario para emitir la invitación.</small>
+  </main>
+</body>
+</html>
