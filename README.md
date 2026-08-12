@@ -1,5 +1,7 @@
 # Laboratorio colaborativo de Apache Airflow
 
+Versión del laboratorio: Apache Airflow `3.3.0`, Python `3.11` y Pandas `2.2.3`.
+
 Repositorio para la dinámica de la semana 4 de Seminario de Sistemas 2. Cada
 estudiante propone un DAG mediante un pull request; GitHub valida que el archivo
 pueda importarse y, después de la revisión del docente, el DAG se publica en
