@@ -10,7 +10,7 @@ from airflow.operators.empty import EmptyOperator
 
 
 @dag(
-    dag_id="fulano mengano 20200000",
+    dag_id="estudiante_123456789",
     description="Calcula estadísticas sencillas con Pandas",
     start_date=datetime(2026, 1, 1),
     schedule=None,
