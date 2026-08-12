@@ -5,8 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 
 import pandas as pd
-from airflow.decorators import dag, task
-from airflow.operators.empty import EmptyOperator
+from airflow.sdk import dag, task
 
 
 @dag(
@@ -18,7 +17,9 @@ from airflow.operators.empty import EmptyOperator
     tags=["ss2", "estudiante", "123456789"],
 )
 def analisis_pandas():
-    inicio = EmptyOperator(task_id="inicio")
+    @task
+    def inicio() -> None:
+        print("Iniciando análisis con Pandas")
 
     @task
     def calcular_estadisticas() -> dict[str, float]:
@@ -33,9 +34,10 @@ def analisis_pandas():
     def mostrar_resultado(resultado: dict[str, float]) -> None:
         print(f"Carnet: 123456789 | Estadísticas: {resultado}")
 
+    comienzo = inicio()
     estadisticas = calcular_estadisticas()
     fin = mostrar_resultado(estadisticas)
-    inicio >> estadisticas >> fin
+    comienzo >> estadisticas >> fin
 
 
 analisis_pandas()

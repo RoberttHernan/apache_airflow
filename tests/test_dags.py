@@ -1,4 +1,4 @@
-from airflow.models import DagBag
+from airflow.models.dagbag import DagBag
 
 
 def test_all_dags_import_without_errors():

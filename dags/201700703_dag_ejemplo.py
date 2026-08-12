@@ -1,13 +1,10 @@
-"""DAG de referencia para la actividad de Airflow de SS2."""
+"""DAG de referencia compatible con la interfaz pública de Airflow 3."""
 
 from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-from airflow.decorators import dag, task
-from airflow.exceptions import AirflowFailException
-from airflow.operators.python import BranchPythonOperator
-from airflow.operators.empty import EmptyOperator
+from airflow.sdk import dag, task
 
 
 DEFAULT_ARGS = {
@@ -19,7 +16,7 @@ DEFAULT_ARGS = {
 
 @dag(
     dag_id="201700703_conceptos_basicos",
-    description="TaskFlow, XCom, dependencias, branching y validacion",
+    description="TaskFlow, XCom, dependencias, branching y validación",
     default_args=DEFAULT_ARGS,
     start_date=datetime(2026, 1, 1),
     schedule=None,
@@ -27,33 +24,41 @@ DEFAULT_ARGS = {
     tags=["ss2", "ejemplo", "201700703"],
 )
 def conceptos_basicos():
-    inicio = EmptyOperator(task_id="inicio")
+    @task
+    def inicio() -> None:
+        print("Iniciando DAG de ejemplo")
 
     @task
     def crear_datos() -> list[int]:
-        """El valor retornado se guarda automáticamente en XCom."""
+        """El retorno se almacena automáticamente como XCom."""
         return [2, 4, 6, 8, 10]
 
     @task
     def calcular_promedio(valores: list[int]) -> float:
         if not valores:
-            raise AirflowFailException("La lista no puede estar vacía")
+            raise ValueError("La lista no puede estar vacía")
         return sum(valores) / len(valores)
 
+    @task.branch
     def elegir_ruta(promedio: float) -> str:
         return "promedio_alto" if promedio >= 6 else "promedio_bajo"
 
+    @task
+    def promedio_alto() -> None:
+        print("El promedio es alto")
+
+    @task
+    def promedio_bajo() -> None:
+        print("El promedio es bajo")
+
+    comienzo = inicio()
     datos = crear_datos()
     promedio = calcular_promedio(datos)
-    decidir = BranchPythonOperator(
-        task_id="elegir_ruta",
-        python_callable=elegir_ruta,
-        op_kwargs={"promedio": promedio},
-    )
-    alto = EmptyOperator(task_id="promedio_alto")
-    bajo = EmptyOperator(task_id="promedio_bajo")
+    decidir = elegir_ruta(promedio)
+    alto = promedio_alto()
+    bajo = promedio_bajo()
 
-    inicio >> datos
+    comienzo >> datos
     promedio >> decidir >> [alto, bajo]
 
 
