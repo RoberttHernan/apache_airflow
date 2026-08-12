@@ -11,14 +11,14 @@ from airflow.operators.empty import EmptyOperator
 
 
 DEFAULT_ARGS = {
-    "owner": "fulano mengano 20200000",
+    "owner": "fulano_mengano_20200000",
     "retries": 1,
     "retry_delay": timedelta(minutes=1),
 }
 
 
 @dag(
-    dag_id="201700703_conceptos_basicos",
+    dag_id="fulano_mengano_20200000",
     description="TaskFlow, XCom, dependencias, branching y validacion",
     default_args=DEFAULT_ARGS,
     start_date=datetime(2026, 1, 1),
